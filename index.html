@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar las versiones de las APP</title>
+    <style>
+        /* Estilos generales de la página */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            position: relative; /* Necesario para colocar la capa de fondo difusa encima */
+        }
+
+        /* Capa de fondo difusa */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://web.didiglobal.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fn7hs0hadu6ro%2F3JdRl2a6o9s5Mn2Jr45ITB%2F6fba0a28e31b4b966f7bac4d0e552e6a%2Flugares-tur__sticos-de-Buenos-Aires.jpg&w=3840&q=75');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            filter: blur(10px); /* Aplica un desenfoque */
+            z-index: -1; /* Asegura que la capa difusa esté detrás del contenido */
+        }
+
+        /* Título grande y atractivo */
+        h1 {
+            font-size: 40px;
+            background: linear-gradient(10deg, #3e4b75 40%, #ff5722 40%, #ffeb3b 70%);
+            color: transparent;
+            background-clip: text;
+            margin-top: 20px;
+        }
+
+        /* Estilos para las tarjetas de cada app */
+        .app-card {
+            background-color: white;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+            box-sizing: border-box;
+            position: relative; /* Necesario para que las tarjetas no se vean afectadas por el fondo */
+        }
+
+        .app-card h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .app-card button {
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Estilos individuales para los botones */
+        .mia-button {
+            background-color: #ff5722;
+        }
+        .ponal-button {
+            background-color: #207f00;
+        }
+        .osecac-button {
+            background-color: #3136ce;
+        }
+        .hooli-button {
+            background-color: #f6ff00;
+        }
+        .rn-hooli-button {
+            background-color: #008149;
+        }
+
+        .app-card button:hover {
+            opacity: 0.8;
+        }
+
+        /* Contenedor de todas las tarjetas */
+        .apps-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+            margin-top: 20px;
+            overflow-x: auto;
+            padding: 0 10px;
+        }
+
+        /* Estilo para las imágenes dentro de cada tarjeta */
+        .app-card img {
+            width: 100%;
+            max-width: 180px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        /* Contenedor para el logo */
+        .logo-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Efecto de parallax */
+        .parallax {
+            height: 100%;
+            background-image: url('https://web.didiglobal.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fn7hs0hadu6ro%2F3JdRl2a6o9s5Mn2Jr45ITB%2F6fba0a28e31b4b966f7bac4d0e552e6a%2Flugares-tur__sticos-de-Buenos-Aires.jpg&w=3840&q=75');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <h1>Verificar las versiones de las APP</h1>
+
+    <!-- Contenedor de botones -->
+    <div class="apps-container">
+        <!-- MIA -->
+        <div class="app-card">
+            <img src="https://play-lh.googleusercontent.com/l_J0UhLRYnzgBC_BjWmr05EmYcoa3YrW_E3YpXNX9LquIKpY-cIXt5Iu2piRz-zSLQ=w480-h960-rw" alt="Imagen de MIA">
+            <h2>MIA</h2>
+            <a href="https://play.google.com/store/apps/details?id=me.miaid.wallet&hl=es_AR" target="_blank">
+                <button class="mia-button">Verificar versión</button>
+            </a>
+        </div>
+
+        <!-- PONAL -->
+        <div class="app-card">
+            <img src="https://play-lh.googleusercontent.com/9p-H8KJPah3i3fSXvcRwRihMxUPFZmg606VRpEUeYOmH9mPLU3ag9otNue0fs17QiQ=w480-h960-rw" alt="Imagen de PONAL">
+            <h2>PONAL</h2>
+            <a href="https://play.google.com/store/apps/details?id=me.miaid.ponalmia&hl=es_AR" target="_blank">
+                <button class="ponal-button">Verificar versión</button>
+            </a>
+        </div>
+
+        <!-- OSECAC -->
+        <div class="app-card">
+            <img src="https://play-lh.googleusercontent.com/Saeph7Dkkft4UV_x7fX_cS6AsOdR38iqAPvV7iF6gXklTmITofvORWmsrzPvei71ww=w480-h960-rw" alt="Imagen de OSECAC">
+            <h2>OSECAC</h2>
+            <a href="https://play.google.com/store/apps/details?id=me.miaid.osecac&hl=es_AR&pli=1" target="_blank">
+                <button class="osecac-button">Verificar versión</button>
+            </a>
+        </div>
+
+        <!-- hooli -->
+        <div class="app-card">
+            <img src="https://play-lh.googleusercontent.com/qb_Xf_BkIGz1IShB6yqwLxdAAZyqXhYWPd8NdpM4QwZ5DDpiPnE_EUQFe8PGegidjA=s96-rw" alt="Imagen de hooli">
+            <h2>hooli</h2>
+            <a href="https://play.google.com/store/apps/details?id=net.airata.hooli.app&hl=es_AR" target="_blank">
+                <button class="hooli-button">Verificar versión</button>
+            </a>
+        </div>
+
+        <!-- RN Hooli (nueva app) -->
+        <div class="app-card">
+            <img src="https://play-lh.googleusercontent.com/ayyGjlA-8qOiv-fBr5cKfX8mJmZx2ifbsy-BODc88VYLwmsEWRddA4bPVUaY8ZNjsg=w480-h960-rw" alt="Imagen de RN Hooli">
+            <h2>RN Hooli</h2>
+            <a href="https://play.google.com/store/apps/details?id=net.airata.hoolisur&hl=es_AR" target="_blank">
+                <button class="rn-hooli-button">Verificar versión</button>
+            </a>
+        </div>
+    </div>
+
+    <!-- Contenedor para el logo -->
+    <div class="logo-container">
+        <h3>¡Gracias por usar nuestra herramienta!</h3>
+        <p>¡Disfruta verificando las versiones de tus aplicaciones!</p>
+        <img src="https://media.licdn.com/dms/image/v2/C4D0BAQG2q8fvnHbTog/company-logo_200_200/company-logo_200_200/0/1676323688005?e=2147483647&v=beta&t=89SrwI_57nW0JBux_fP28Sw5BRKkj8Zcc90jRvmpEQA" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
+        <p>&copy; <span id="year"></span> 2025 Todos los derechos reservados.</p>
+    </div>
+</body>
+</html>
