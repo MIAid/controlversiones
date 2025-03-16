@@ -8,27 +8,29 @@
         /* Estilos generales de la página */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
             text-align: center;
-            position: relative; /* Necesario para colocar la capa de fondo difusa encima */
+            position: relative;
+            height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
+            overflow: hidden; /* Elimina cualquier posible desplazamiento innecesario */
         }
 
         /* Capa de fondo difusa */
         body::before {
             content: "";
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background-image: url('https://web.didiglobal.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fn7hs0hadu6ro%2F3JdRl2a6o9s5Mn2Jr45ITB%2F6fba0a28e31b4b966f7bac4d0e552e6a%2Flugares-tur__sticos-de-Buenos-Aires.jpg&w=3840&q=75');
-            background-size: cover;
+            background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
             background-position: center center;
             background-repeat: no-repeat;
-            filter: blur(1px); /* Más desenfoque para suavizar el fondo */
-            z-index: -1; /* Asegura que la capa difusa esté detrás del contenido */
+            filter: blur(1px); /* Añade desenfoque */
+            z-index: -1; /* Asegura que el fondo esté detrás del contenido */
+            height: 100%; /* Asegura que el fondo cubra toda la altura */
         }
 
         /* Fondo semitransparente en toda la página */
@@ -63,7 +65,7 @@
             width: 180px;
             text-align: center;
             box-sizing: border-box;
-            position: relative; /* Necesario para que las tarjetas no se vean afectadas por el fondo */
+            position: relative;
         }
 
         .app-card h2 {
@@ -134,41 +136,29 @@
         .logo-container h3 {
             font-size: 24px;
             font-weight: bold;
-            background: linear-gradient(50deg, #e76800, #ff5722, #ffeb3b); /* Gradiente de tres colores */
+            background: linear-gradient(50deg, #e76800, #ff5722, #ffeb3b);
             -webkit-background-clip: text;
-            color: transparent; /* Hace que solo el gradiente se vea */
+            color: transparent;
             margin-bottom: 10px;
         }
 
         .logo-container p {
             font-size: 16px;
             font-weight: normal;
-            background: linear-gradient(50deg, #fc8301, #ff8c00, #ffeb3b); /* Gradiente de tres colores */
+            background: linear-gradient(50deg, #fc8301, #ff8c00, #ffeb3b);
             -webkit-background-clip: text;
-            color: transparent; /* Hace que solo el gradiente se vea */
-        }
-
-        /* Efecto de parallax */
-        .parallax {
-            height: 100%;
-            background-image: url('https://web.didiglobal.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fn7hs0hadu6ro%2F3JdRl2a6o9s5Mn2Jr45ITB%2F6fba0a28e31b4b966f7bac4d0e552e6a%2Flugares-tur__sticos-de-Buenos-Aires.jpg&w=3840&q=75');
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            position: relative;
+            color: transparent;
         }
 
         /* Estilo para el reloj */
         .clock {
             font-size: 24px;
             font-weight: bold;
-            background: linear-gradient(120deg, hsl(232, 100%, 50%), #ff6a00, #ffeb3b); /* Tres colores */
+            background: linear-gradient(120deg, hsl(232, 100%, 50%), #ff6a00, #ffeb3b);
             -webkit-background-clip: text;
-            color: transparent; /* Hace que solo el gradiente se vea */
+            color: transparent;
             margin-top: 20px;
         }
-
     </style>
 </head>
 <body>
@@ -229,7 +219,7 @@
     <div class="logo-container">
         <h3>¡Gracias por usar nuestra herramienta!</h3>
         <p>¡Disfruta verificando las versiones de tus aplicaciones!</p>
-        <img src="MIAid.jpeg" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
+        <img src="imagen/MIAid.jpeg" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
         <p>&copy; <span id="year"></span> 2025 Todos los derechos reservados.</p>
     </div>
 
