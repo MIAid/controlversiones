@@ -14,35 +14,7 @@
             position: relative;
             height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
             overflow: hidden; /* Elimina cualquier posible desplazamiento innecesario */
-        }
-
-        /* Capa de fondo difusa */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('https://web.didiglobal.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fn7hs0hadu6ro%2F3JdRl2a6o9s5Mn2Jr45ITB%2F6fba0a28e31b4b966f7bac4d0e552e6a%2Flugares-tur__sticos-de-Buenos-Aires.jpg&w=3840&q=75');
-            background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
-            background-position: center center;
-            background-repeat: no-repeat;
-            filter: blur(1px); /* Añade desenfoque */
-            z-index: -1; /* Asegura que el fondo esté detrás del contenido */
-            height: 100%; /* Asegura que el fondo cubra toda la altura */
-        }
-
-        /* Fondo semitransparente en toda la página */
-        body::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
-            z-index: -1; /* Asegura que esté detrás del contenido */
+            transition: background-image 1s ease-in-out; /* Transición suave para el cambio de fondo */
         }
 
         /* Título grande y atractivo */
@@ -219,23 +191,40 @@
     <div class="logo-container">
         <h3>¡Gracias por usar nuestra herramienta!</h3>
         <p>¡Disfruta verificando las versiones de tus aplicaciones!</p>
-        <img src="MIAid.jpeg" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
+        <img src="imagen/" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
         <p>&copy; <span id="year"></span> 2025 Todos los derechos reservados.</p>
     </div>
 
     <script>
-        function updateClock() {
+        // Función que cambia el fondo según la hora
+        function cambiarFondoSegunHora() {
             var now = new Date();
-            var hours = now.getHours().toString().padStart(2, '0');
-            var minutes = now.getMinutes().toString().padStart(2, '0');
-            var seconds = now.getSeconds().toString().padStart(2, '0');
-            var date = now.toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-            document.getElementById('clock').textContent = `${date} - ${hours}:${minutes}:${seconds}`;
+            var hours = now.getHours();
+            var fondo;
+    
+            if (hours >= 6 && hours < 12) {
+                fondo = "url('imagen/amanecer.jpg')"; // Imagen de amanecer
+            } else if (hours >= 12 && hours < 18) {
+                fondo = "url('imagen/dia.jpg')"; // Imagen de día
+            } else if (hours >= 18 && hours < 20) {
+                fondo = "url('imagen/atardecer.jpg')"; // Imagen de atardecer
+            } else {
+                fondo = "url('imagen/noche.jpg')"; // Imagen de noche
+            }
+    
+            // Cambiar el fondo de la página
+            document.body.style.backgroundImage = fondo;
+            document.body.style.backgroundSize = 'cover'; // Asegura que la imagen cubra toda la pantalla
+            document.body.style.backgroundPosition = 'center'; // Centra la imagen de fondo
+            document.body.style.backgroundRepeat = 'no-repeat'; // Evita que se repita la imagen
         }
-
-        setInterval(updateClock, 1000);
-        updateClock(); // Llamar a la función de inmediato para mostrar la hora sin espera.
+    
+        // Llamar a la función al cargar la página
+        window.onload = cambiarFondoSegunHora;
     </script>
+    
 </body>
 </html>
+
+
+
