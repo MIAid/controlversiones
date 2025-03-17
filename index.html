@@ -108,7 +108,7 @@
         .logo-container h3 {
             font-size: 24px;
             font-weight: bold;
-            background: linear-gradient(50deg, #e76800, #ff5722, #ffeb3b);
+            background: linear-gradient(50deg, #e76800, #000000, #ffeb3b);
             -webkit-background-clip: text;
             color: transparent;
             margin-bottom: 10px;
@@ -117,7 +117,7 @@
         .logo-container p {
             font-size: 16px;
             font-weight: normal;
-            background: linear-gradient(50deg, #fc8301, #ff8c00, #ffeb3b);
+            background: linear-gradient(50deg, #000000, #774200, #544c00);
             -webkit-background-clip: text;
             color: transparent;
         }
@@ -191,7 +191,7 @@
     <div class="logo-container">
         <h3>¡Gracias por usar nuestra herramienta!</h3>
         <p>¡Disfruta verificando las versiones de tus aplicaciones!</p>
-        <img src="imagen/MIAid.jpeg" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
+        <img src="imagen/" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
         <p>&copy; <span id="year"></span> 2025 Todos los derechos reservados.</p>
     </div>
 
@@ -203,13 +203,13 @@
             var fondo;
     
             if (hours >= 6 && hours < 12) {
-                fondo = "url('imagen/Amanecer.jpg')"; // Imagen de amanecer
+                fondo = "url('imagen/amanecer.jpg')"; // Imagen de amanecer
             } else if (hours >= 12 && hours < 18) {
-                fondo = "url('imagen/Dia.jpg')"; // Imagen de día
+                fondo = "url('imagen/dia.jpg')"; // Imagen de día
             } else if (hours >= 18 && hours < 20) {
-                fondo = "url('imagen/Atardecer.jpg')"; // Imagen de atardecer
+                fondo = "url('imagen/atardecer.jpg')"; // Imagen de atardecer
             } else {
-                fondo = "url('imagen/Noche.jpg')"; // Imagen de noche
+                fondo = "url('imagen/noche.jpg')"; // Imagen de noche
             }
     
             // Cambiar el fondo de la página
@@ -218,13 +218,28 @@
             document.body.style.backgroundPosition = 'center'; // Centra la imagen de fondo
             document.body.style.backgroundRepeat = 'no-repeat'; // Evita que se repita la imagen
         }
-    
-        // Llamar a la función al cargar la página
+
+        // Función para actualizar la hora y fecha
+        function updateClock() {
+            var now = new Date();
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            var date = now.toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            document.getElementById('clock').textContent = `${date} - ${hours}:${minutes}:${seconds}`;
+        }
+
+        // Llamar a la función al cargar la página y cada segundo
+        setInterval(updateClock, 1000);
+        updateClock(); // Llamar a la función de inmediato para mostrar la hora sin espera.
+
+        // Llamar a la función de cambiar fondo
         window.onload = cambiarFondoSegunHora;
     </script>
-    
 </body>
 </html>
+
 
 
 
