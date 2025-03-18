@@ -108,18 +108,20 @@
         .logo-container h3 {
             font-size: 24px;
             font-weight: bold;
-            background: linear-gradient(50deg, #e76800, #000000, #ffeb3b);
+            background: linear-gradient(50deg, #ffffff, #ffffff, #fffffd);
             -webkit-background-clip: text;
             color: transparent;
             margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Reducción de la sombra para mayor nitidez */
         }
 
         .logo-container p {
             font-size: 16px;
             font-weight: normal;
-            background: linear-gradient(50deg, #000000, #774200, #544c00);
+            background: linear-gradient(50deg, #ffffff, #ffffff, #ffffff);
             -webkit-background-clip: text;
             color: transparent;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Reducción de la sombra para mayor nitidez */
         }
 
         /* Estilo para el reloj */
@@ -130,6 +132,15 @@
             -webkit-background-clip: text;
             color: transparent;
             margin-top: 20px;
+        }
+
+        /* Estilos para el texto dinámico de color según la hora */
+        .daytime h3, .daytime p {
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .nighttime h3, .nighttime p {
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
         }
     </style>
 </head>
@@ -191,7 +202,7 @@
     <div class="logo-container">
         <h3>¡Gracias por usar nuestra herramienta!</h3>
         <p>¡Disfruta verificando las versiones de tus aplicaciones!</p>
-        <img src="imagen/MIAid.jpeg" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
+        <img src="imagen/" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
         <p>&copy; <span id="year"></span> 2025 Todos los derechos reservados.</p>
     </div>
 
@@ -203,13 +214,13 @@
             var fondo;
     
             if (hours >= 6 && hours < 12) {
-                fondo = "url('imagen/Amanecer.jpg')"; // Imagen de amanecer
+                fondo = "url('imagen/amanecer.jpg')"; // Imagen de amanecer
             } else if (hours >= 12 && hours < 18) {
-                fondo = "url('imagen/Dia.jpg')"; // Imagen de día
+                fondo = "url('imagen/dia.jpg')"; // Imagen de día
             } else if (hours >= 18 && hours < 20) {
-                fondo = "url('imagen/Atardecer.jpg')"; // Imagen de atardecer
+                fondo = "url('imagen/atardecer.jpg')"; // Imagen de atardecer
             } else {
-                fondo = "url('imagen/Noche.jpg')"; // Imagen de noche
+                fondo = "url('imagen/noche.jpg')"; // Imagen de noche
             }
     
             // Cambiar el fondo de la página
@@ -239,7 +250,3 @@
     </script>
 </body>
 </html>
-
-
-
-
