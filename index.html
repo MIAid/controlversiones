@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verificar las versiones de las APP</title>
+    <!-- Tailwind CSS CDN para el modal y estilos básicos (aunque no se use directamente en tu CSS original, es bueno tenerlo si se necesitan clases utilitarias) -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Estilos generales de la página */
         body {
@@ -12,8 +14,9 @@
             padding: 0;
             text-align: center;
             position: relative;
-            height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
-            overflow: hidden; /* Elimina cualquier posible desplazamiento innecesario */
+            min-height: 100vh; /* Cambiado de height a min-height para mejor compatibilidad */
+            overflow-x: hidden; /* Elimina cualquier posible desplazamiento horizontal */
+            overflow-y: auto; /* Permite desplazamiento vertical si el contenido es largo */
             transition: background-image 1s ease-in-out; /* Transición suave para el cambio de fondo */
         }
 
@@ -22,8 +25,10 @@
             font-size: 40px;
             background: linear-gradient(10deg, #3e4b75 40%, #ff5722 40%, #ffeb3b 70%);
             color: transparent;
+            -webkit-background-clip: text;
             background-clip: text;
             margin-top: 20px;
+            margin-bottom: 30px; /* Añadido margen inferior para separar del reloj/tarjetas */
         }
 
         /* Estilos para las tarjetas de cada app */
@@ -33,11 +38,14 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(249, 247, 247, 0.1);
-            display: inline-block;
+            display: inline-flex; /* Usar inline-flex para centrar contenido verticalmente */
+            flex-direction: column;
+            justify-content: space-between; /* Para que el contenido (imagen, título, botón) se espacie */
+            align-items: center; /* Centra los items horizontalmente */
             width: 180px;
             text-align: center;
             box-sizing: border-box;
-            position: relative;
+            vertical-align: top; /* Asegura que las tarjetas se alineen correctamente si hay varias filas */
         }
 
         .app-card h2 {
@@ -53,35 +61,28 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            color: white; /* Color de texto para todos los botones */
+            width: 100%; /* Asegura que el botón ocupe todo el ancho de su contenedor */
         }
 
         /* Estilos individuales para los botones */
-        .mia-button {
-            background-color: #ff5722;
-        }
-        .ponal-button {
-            background-color: #207f00;
-        }
-        .osecac-button {
-            background-color: #3136ce;
-        }
-        .hooli-button {
-            background-color: #f6ff00;
-        }
-        .rn-hooli-button {
-            background-color: #008149;
-        }
+        .mia-button { background-color: #ff5722; }
+        .ponal-button { background-color: #207f00; }
+        .osecac-button { background-color: #3136ce; }
+        .hooli-button { background-color: #f6ff00; color: #333; /* Texto oscuro para fondo claro */ }
+        .rn-hooli-button { background-color: #008149; }
 
         .app-card button:hover {
             opacity: 0.8;
+            transform: translateY(-2px); /* Efecto al pasar el ratón */
         }
 
         /* Contenedor de todas las tarjetas */
         .apps-container {
             display: flex;
             justify-content: center;
-            flex-wrap: nowrap;
-            gap: 10px;
+            flex-wrap: wrap; /* Permite que las tarjetas se envuelvan a la siguiente línea en pantallas pequeñas */
+            gap: 15px; /* Aumentado el espacio entre tarjetas */
             margin-top: 20px;
             overflow-x: auto;
             padding: 0 10px;
@@ -90,18 +91,20 @@
         /* Estilo para las imágenes dentro de cada tarjeta */
         .app-card img {
             width: 100%;
-            max-width: 180px;
+            max-width: 120px; /* Reducido un poco el tamaño de las imágenes */
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(246, 244, 244, 0.1);
             margin-bottom: 15px;
         }
 
-        /* Contenedor para el logo */
+        /* Contenedor para el logo (footer) */
         .logo-container {
             text-align: center;
             margin-top: 40px;
             position: relative;
+            padding-bottom: 20px;
+            width: 100%; /* Asegura que el footer ocupe todo el ancho */
         }
 
         /* Colores para los textos dentro del contenedor del logo con gradiente */
@@ -110,6 +113,7 @@
             font-weight: bold;
             background: linear-gradient(50deg, #ffffff, #ffffff, #fffffd);
             -webkit-background-clip: text;
+            background-clip: text;
             color: transparent;
             margin-bottom: 10px;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Reducción de la sombra para mayor nitidez */
@@ -120,6 +124,7 @@
             font-weight: normal;
             background: linear-gradient(50deg, #ffffff, #ffffff, #ffffff);
             -webkit-background-clip: text;
+            background-clip: text;
             color: transparent;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Reducción de la sombra para mayor nitidez */
         }
@@ -130,17 +135,66 @@
             font-weight: bold;
             background: linear-gradient(120deg, hsl(232, 100%, 50%), #ff6a00, #ffeb3b);
             -webkit-background-clip: text;
+            background-clip: text;
             color: transparent;
             margin-top: 20px;
+            margin-bottom: 30px;
         }
 
         /* Estilos para el texto dinámico de color según la hora */
-        .daytime h3, .daytime p {
-            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+        .daytime h3, .daytime p { text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8); }
+        .nighttime h3, .nighttime p { text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); }
+
+        /* Estilos para el MODAL (ventana emergente) */
+        .modal {
+            position: fixed; /* Fijo en la pantalla */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente oscuro */
+            display: flex; /* Para centrar el contenido del modal */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Asegura que esté por encima de todo lo demás */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease; /* Transición suave para aparecer/desaparecer */
         }
 
-        .nighttime h3, .nighttime p {
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 350px; /* Ancho máximo para el modal de versión */
+            position: relative;
+            transform: translateY(-20px); /* Pequeño efecto de entrada */
+            transition: transform 0.3s ease;
+        }
+
+        .modal.open .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #555;
+        }
+        .modal-close-btn:hover {
+            color: #333;
         }
     </style>
 </head>
@@ -156,45 +210,46 @@
         <div class="app-card">
             <img src="https://play-lh.googleusercontent.com/l_J0UhLRYnzgBC_BjWmr05EmYcoa3YrW_E3YpXNX9LquIKpY-cIXt5Iu2piRz-zSLQ=w480-h960-rw" alt="Imagen de MIA">
             <h2>MIA</h2>
-            <a href="https://play.google.com/store/apps/details?id=me.miaid.wallet&hl=es_AR" target="_blank">
-                <button class="mia-button">Verificar versión</button>
-            </a>
+            <!-- Ahora es un botón que abre un modal, no un enlace directo -->
+            <button class="check-version-btn mia-button" 
+                    data-app-name="MIA" 
+                    data-app-version="2.15.0">Verificar versión</button>
         </div>
 
         <!-- PONAL -->
         <div class="app-card">
             <img src="https://play-lh.googleusercontent.com/9p-H8KJPah3i3fSXvcRwRihMxUPFZmg606VRpEUeYOmH9mPLU3ag9otNue0fs17QiQ=w480-h960-rw" alt="Imagen de PONAL">
             <h2>PONAL</h2>
-            <a href="https://play.google.com/store/apps/details?id=me.miaid.ponalmia&hl=es_AR" target="_blank">
-                <button class="ponal-button">Verificar versión</button>
-            </a>
+            <button class="check-version-btn ponal-button" 
+                    data-app-name="PONAL" 
+                    data-app-version="3.0.1">Verificar versión</button>
         </div>
 
         <!-- OSECAC -->
         <div class="app-card">
             <img src="https://play-lh.googleusercontent.com/Saeph7Dkkft4UV_x7fX_cS6AsOdR38iqAPvV7iF6gXklTmITofvORWmsrzPvei71ww=w480-h960-rw" alt="Imagen de OSECAC">
             <h2>OSECAC</h2>
-            <a href="https://play.google.com/store/apps/details?id=me.miaid.osecac&hl=es_AR&pli=1" target="_blank">
-                <button class="osecac-button">Verificar versión</button>
-            </a>
+            <button class="check-version-btn osecac-button" 
+                    data-app-name="OSECAC" 
+                    data-app-version="1.8.5">Verificar versión</button>
         </div>
 
         <!-- hooli -->
         <div class="app-card">
             <img src="https://play-lh.googleusercontent.com/qb_Xf_BkIGz1IShB6yqwLxdAAZyqXhYWPd8NdpM4QwZ5DDpiPnE_EUQFe8PGegidjA=s96-rw" alt="Imagen de hooli">
             <h2>hooli</h2>
-            <a href="https://play.google.com/store/apps/details?id=net.airata.hooli.app&hl=es_AR" target="_blank">
-                <button class="hooli-button">Verificar versión</button>
-            </a>
+            <button class="check-version-btn hooli-button" 
+                    data-app-name="hooli" 
+                    data-app-version="5.0.2">Verificar versión</button>
         </div>
 
         <!-- RN Hooli (nueva app) -->
         <div class="app-card">
             <img src="https://play-lh.googleusercontent.com/ayyGjlA-8qOiv-fBr5cKfX8mJmZx2ifbsy-BODc88VYLwmsEWRddA4bPVUaY8ZNjsg=w480-h960-rw" alt="Imagen de RN Hooli">
             <h2>RN Hooli</h2>
-            <a href="https://play.google.com/store/apps/details?id=net.airata.hoolisur&hl=es_AR" target="_blank">
-                <button class="rn-hooli-button">Verificar versión</button>
-            </a>
+            <button class="check-version-btn rn-hooli-button" 
+                    data-app-name="RN Hooli" 
+                    data-app-version="1.0.0">Verificar versión</button>
         </div>
     </div>
 
@@ -202,8 +257,17 @@
     <div class="logo-container">
         <h3>¡Gracias por usar nuestra herramienta!</h3>
         <p>¡Disfruta verificando las versiones de tus aplicaciones!</p>
-        <img src="imagen/MIAid.jpeg" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
+        <img src="imagen/MIAid.jpeg" onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/000000?text=Logo';" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
         <p>&copy; <span id="year"></span> 2025 Todos los derechos reservados.</p>
+    </div>
+
+    <!-- Modal para mostrar la versión de la APP -->
+    <div id="versionModal" class="modal">
+        <div class="modal-content">
+            <button id="closeModalBtn" class="modal-close-btn">&times;</button>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center" id="modalAppNameVersion"></h3>
+            <p class="text-gray-700 text-left mb-4 text-center" id="modalAppVersionText"></p>
+        </div>
     </div>
 
     <script>
@@ -212,19 +276,27 @@
             var now = new Date();
             var hours = now.getHours();
             var fondo;
-    
+            var bodyElement = document.body;
+            
             if (hours >= 6 && hours < 12) {
                 fondo = "url('imagen/Amanecer.jpg')"; // Imagen de amanecer
+                bodyElement.classList.remove('nighttime');
+                bodyElement.classList.add('daytime');
             } else if (hours >= 12 && hours < 18) {
                 fondo = "url('imagen/Dia.jpg')"; // Imagen de día
+                bodyElement.classList.remove('nighttime');
+                bodyElement.classList.add('daytime');
             } else if (hours >= 18 && hours < 20) {
                 fondo = "url('imagen/Atardecer.jpg')"; // Imagen de atardecer
+                bodyElement.classList.remove('nighttime');
+                bodyElement.classList.add('daytime');
             } else {
                 fondo = "url('imagen/Noche.jpg')"; // Imagen de noche
+                bodyElement.classList.remove('daytime');
+                bodyElement.classList.add('nighttime');
             }
-    
-            // Cambiar el fondo de la página
-            document.body.style.backgroundImage = fondo;
+            
+            bodyElement.style.backgroundImage = fondo;
             document.body.style.backgroundSize = 'cover'; // Asegura que la imagen cubra toda la pantalla
             document.body.style.backgroundPosition = 'center'; // Centra la imagen de fondo
             document.body.style.backgroundRepeat = 'no-repeat'; // Evita que se repita la imagen
@@ -239,14 +311,48 @@
             var date = now.toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
             document.getElementById('clock').textContent = `${date} - ${hours}:${minutes}:${seconds}`;
+            document.getElementById('year').textContent = now.getFullYear(); // Actualiza el año en el footer
         }
 
-        // Llamar a la función al cargar la página y cada segundo
-        setInterval(updateClock, 1000);
-        updateClock(); // Llamar a la función de inmediato para mostrar la hora sin espera.
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar reloj y fondo
+            updateClock();
+            setInterval(updateClock, 1000);
+            cambiarFondoSegunHora();
+            // Actualiza el fondo si la hora cambia a una nueva franja (cada hora)
+            setInterval(cambiarFondoSegunHora, 60 * 60 * 1000); 
 
-        // Llamar a la función de cambiar fondo
-        window.onload = cambiarFondoSegunHora;
+            // --- Lógica del Modal de Versión ---
+            const versionModal = document.getElementById('versionModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalAppNameVersion = document.getElementById('modalAppNameVersion');
+            const modalAppVersionText = document.getElementById('modalAppVersionText');
+            const checkVersionBtns = document.querySelectorAll('.check-version-btn'); // Selecciona todos los botones de "Verificar versión"
+
+            // Event listener para los botones "Verificar versión"
+            checkVersionBtns.forEach(button => {
+                button.addEventListener('click', () => {
+                    const appName = button.dataset.appName;
+                    const appVersion = button.dataset.appVersion;
+
+                    modalAppNameVersion.textContent = `Versión de ${appName}`;
+                    modalAppVersionText.textContent = `La versión actual es: ${appVersion}`;
+                    versionModal.classList.add('open'); // Abre el modal
+                });
+            });
+
+            // Event listener para cerrar el modal al hacer clic en la X
+            closeModalBtn.addEventListener('click', () => {
+                versionModal.classList.remove('open'); // Cierra el modal
+            });
+
+            // Event listener para cerrar el modal al hacer clic fuera del contenido
+            versionModal.addEventListener('click', (e) => {
+                if (e.target === versionModal) {
+                    versionModal.classList.remove('open'); // Cierra el modal
+                }
+            });
+        });
     </script>
 </body>
 </html>
