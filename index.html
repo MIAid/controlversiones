@@ -257,7 +257,8 @@
     <div class="logo-container">
         <h3>¡Gracias por usar nuestra herramienta!</h3>
         <p>¡Disfruta verificando las versiones de tus aplicaciones!</p>
-        <img src="imagen/MIAid.jpeg" onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/000000?text=Logo';" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px;">
+        <!-- Se ha modificado el estilo para centrar la imagen -->
+        <img src="imagen/MIAid.jpeg" onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/000000?text=Logo';" alt="Imagen de pie de página" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 20px; display: block; margin-left: auto; margin-right: auto;">
         <p>&copy; <span id="year"></span> 2025 Todos los derechos reservados.</p>
     </div>
 
@@ -284,10 +285,6 @@
                 bodyElement.classList.add('daytime');
             } else if (hours >= 12 && hours < 18) {
                 fondo = "url('imagen/Dia.jpg')"; // Imagen de día
-                bodyElement.classList.remove('nighttime');
-                bodyElement.classList.add('daytime');
-            } else if (hours >= 18 && hours < 20) {
-                fondo = "url('imagen/Atardecer.jpg')"; // Imagen de atardecer
                 bodyElement.classList.remove('nighttime');
                 bodyElement.classList.add('daytime');
             } else {
