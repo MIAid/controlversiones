@@ -7,6 +7,7 @@
     <!-- Tailwind CSS CDN para estilos modernos y responsivos -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Estilos personalizados que complementan Tailwind */
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #a7b7eb, #e0f2f7); /* Degradado moderno para el fondo */
@@ -138,16 +139,22 @@
                 font-size: 1.1rem;
                 padding: 12px 25px;
             }
+            .container {
+                padding: 30px; /* Reducir padding en pantallas muy pequeñas */
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Puedes añadir una imagen aquí si lo deseas, por ejemplo, un logo grande -->
+        <img src="https://placehold.co/150x150/0056b3/FFFFFF?text=MIAid+Logo" alt="Logo de la Empresa" class="mb-8 mx-auto rounded-full shadow-lg">
+
         <h1>Bienvenido</h1>
-        <p class="subtitle">AIRTA - hooli - MIAid</p>
+        <p class="subtitle">Herramientas esenciales para AIRTA, Hooli y MIAid</p>
 
         <div class="button-group">
-            <!-- Botón para Versiones de APP: Texto modificado -->
+            <!-- Botón para Versiones de APP -->
             <a href="index1.html">
                 <button class="main-button">Versiones de APP</button>
             </a>
