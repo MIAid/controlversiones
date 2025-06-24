@@ -3,24 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparador de Totales NOSIS</title>
-    <!-- Tailwind CSS CDN para estilos modernos y responsivos -->
+    <title>Comparador de Totales NOSIS v2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Fondo claro y suave para esta sección */
+            background-color: #f0f4f8;
             margin: 0;
-            padding: 0;
+            padding: 20px 0;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Alinea al inicio, permitiendo el scroll */
-            align-items: center; /* Centra el contenido horizontalmente */
-            min-height: 100vh; /* Asegura que ocupe toda la altura de la vista */
-            color: #333; /* Color de texto general */
-            text-align: center;
-            padding-top: 20px;
-            padding-bottom: 50px; /* Espacio al final */
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
         }
         .container {
             max-width: 800px;
@@ -29,20 +25,18 @@
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             padding: 30px;
-            box-sizing: border-box;
-            margin-top: 30px; /* Margen superior para separar del borde del body */
+            margin-top: 30px;
         }
         h1 {
-            font-size: 2.5rem; /* Tamaño de título adecuado para sección */
+            font-size: 2.5rem;
             font-weight: 800;
+            text-align: center;
             background: linear-gradient(45deg, #0056b3, #8a2be2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 25px;
         }
-        textarea {
-            resize: vertical;
-            min-height: 120px;
+        textarea, input[type="number"] {
             width: 100%;
             padding: 12px;
             border: 1px solid #d1d5db;
@@ -55,55 +49,23 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
             outline: none;
         }
-        input[type="number"] {
-            -moz-appearance: textfield;
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        button {
-            width: 100%;
-            background-color: #4f46e5; /* Indigo */
-            color: white;
-            font-weight: 700;
-            padding: 14px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        button:hover {
-            background-color: #4338ca; /* Indigo más oscuro */
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-        }
+        input[type="number"] { -moz-appearance: textfield; }
+        input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        
         .result-box {
-            background-color: #e0e7ff; /* Fondo más claro para los resultados */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
         }
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        /* Clases para el diagnóstico */
+        .diag-success { background-color: #dcfce7; /* green-100 */ }
+        .diag-success .diag-text { color: #15803d; /* green-700 */ }
+        .diag-warning { background-color: #fef9c3; /* yellow-100 */ }
+        .diag-warning .diag-text { color: #a16207; /* yellow-700 */ }
+        .diag-error { background-color: #fee2e2; /* red-100 */ }
+        .diag-error .diag-text { color: #b91c1c; /* red-700 */ }
     </style>
 </head>
 <body>
@@ -111,123 +73,106 @@
         <h1>Comparador de Totales NOSIS</h1>
 
         <div class="input-section bg-blue-50 p-6 rounded-lg shadow-inner">
-            <h2 class="text-xl font-semibold text-blue-800 mb-4">Paso 1: Introduce tus datos de la columna "NOSIS"</h2>
-            <p class="text-gray-700 mb-3">
-                Copia y pega aquí todos los números de tu columna **NOSIS**. Puedes separarlos con un salto de línea (Enter).
-            </p>
-            <textarea id="nosisData"
-                      class="p-3 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                      placeholder="Ejemplo:
-431
-1312
-900
-..."></textarea>
+            <h2 class="text-xl font-semibold text-blue-800 mb-4">Paso 1: Introduce los datos de "NOSIS"</h2>
+            <textarea id="nosisData" placeholder="Ej: 431\n1312\n900..."></textarea>
         </div>
 
         <div class="input-section bg-green-50 p-6 rounded-lg shadow-inner">
-            <h2 class="text-xl font-semibold text-green-800 mb-4">Paso 2: Introduce el valor de "NOSIS Correo" a comparar</h2>
-            <p class="text-gray-700 mb-3">
-                Escribe aquí el único número de **NOSIS_Correo** que quieres comparar con el total de arriba.
-            </p>
-            <input type="number" id="nosisCorreo"
-                   class="p-3 border border-green-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200"
-                   placeholder="Ejemplo: 3383" step="any">
+            <h2 class="text-xl font-semibold text-green-800 mb-4">Paso 2: Introduce el valor de "NOSIS Correo"</h2>
+            <input type="number" id="nosisCorreo" placeholder="Ej: 3383" step="any">
         </div>
 
-        <button id="calculateBtn"
-                class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105">
-            Calcular Porcentajes de Diferencia
+        <div class="input-section bg-yellow-50 p-6 rounded-lg shadow-inner">
+            <h2 class="text-xl font-semibold text-yellow-800 mb-4">Paso 3: Define un margen de tolerancia (Opcional)</h2>
+            <p class="text-gray-700 mb-3">Las diferencias menores o iguales a este valor se considerarán aceptables.</p>
+            <input type="number" id="tolerancia" value="0" step="any">
+        </div>
+
+        <button id="calculateBtn" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105">
+            Calcular y Diagnosticar
         </button>
 
         <div id="resultsSection" class="results-section bg-gray-100 p-6 rounded-lg shadow-md space-y-4 hidden">
             <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">Resultados de la Comparación</h2>
-            <div class="flex flex-col md:flex-row justify-around items-center space-y-4 md:space-y-0 md:space-x-6">
-                <div class="result-box bg-purple-100 p-5 rounded-lg text-center shadow-sm w-full md:w-1/4">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div id="diagnosticoBox" class="result-box md:col-span-1 bg-gray-200">
+                    <p class="text-lg font-semibold text-gray-600">Diagnóstico:</p>
+                    <p id="diagnosticoText" class="text-2xl font-extrabold mt-1">Esperando cálculo...</p>
+                </div>
+                <div class="result-box bg-purple-100">
                     <p class="text-lg text-purple-700">Suma Total de NOSIS:</p>
                     <p id="sumNosis" class="text-3xl font-extrabold text-purple-900 mt-1">0</p>
                 </div>
-                <div class="result-box bg-blue-100 p-5 rounded-lg text-center shadow-sm w-full md:w-1/4">
+                <div class="result-box bg-green-100">
+                    <p class="text-lg text-green-700">Valor NOSIS Correo:</p>
+                    <p id="nosisCorreoValueDisplay" class="text-3xl font-extrabold text-green-900 mt-1">0</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                <div class="result-box bg-blue-100">
                     <p class="text-lg text-blue-700">Diferencia Numérica:</p>
                     <p id="diffValue" class="text-3xl font-extrabold text-blue-900 mt-1">0</p>
                 </div>
-                <div class="result-box bg-yellow-100 p-5 rounded-lg text-center shadow-sm w-full md:w-1/4">
-                    <p class="text-lg text-yellow-700">Porcentaje (Valor Mayor):</p>
+                <div class="result-box bg-yellow-100">
+                    <p class="text-lg text-yellow-700">% Dif. (sobre valor menor):</p>
                     <p id="percentageLarger" class="text-3xl font-extrabold text-yellow-900 mt-1">0.00%</p>
                 </div>
-                 <div class="result-box bg-red-100 p-5 rounded-lg text-center shadow-sm w-full md:w-1/4">
-                    <p class="text-lg text-red-700">Porcentaje (Valor Menor):</p>
+                <div class="result-box bg-red-100">
+                    <p class="text-lg text-red-700">% Dif. (sobre valor mayor):</p>
                     <p id="percentageSmaller" class="text-3xl font-extrabold text-red-900 mt-1">0.00%</p>
                 </div>
             </div>
-            <div class="explanation-section mt-6 p-4 bg-gray-200 rounded-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Entendiendo los Porcentajes:</h3>
-                <p class="text-gray-700 mb-2">
-                    <span class="font-bold">Porcentaje (Valor Mayor):</span> Indica cuánto es más grande el número mayor con respecto al número menor (calculado sobre el número menor). Este siempre será un valor positivo.
-                </p>
-                <p class="text-gray-700">
-                    <span class="font-bold">Porcentaje (Valor Menor):</span> Indica cuánto es más pequeño el número menor con respecto al número mayor (calculado sobre el número mayor). Este también será un valor positivo, representando la magnitud de la diferencia desde la perspectiva del valor mayor.
-                </p>
-            </div>
-            <div id="errorMessage" class="text-red-600 text-center font-medium mt-4 hidden"></div>
 
-            <!-- Botón para el análisis LLM de NOSIS -->
-            <button id="analyzeNosisBtn"
-                    class="w-full bg-pink-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-pink-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 mt-6">
-                Analizar Diferencia NOSIS ✨
-            </button>
-            <div id="nosisAnalysisResult" class="mt-4 p-4 bg-white rounded-md text-gray-800 text-left hidden">
-                <p id="analysisText" class="text-gray-700"></p>
-                <div id="analysisLoading" class="text-center mt-2 hidden">
-                    <div class="loading-spinner inline-block"></div>
-                    <span class="ml-2 text-pink-600">Generando análisis...</span>
-                </div>
-            </div>
+            <div id="errorMessage" class="text-red-600 text-center font-medium pt-4 hidden"></div>
         </div>
     </div>
 
-    <!-- El botón para volver al menú principal ha sido eliminado -->
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Lógica de la Calculadora NOSIS ---
+            // --- Elementos del DOM ---
             const nosisDataInput = document.getElementById('nosisData');
             const nosisCorreoInput = document.getElementById('nosisCorreo');
+            const toleranciaInput = document.getElementById('tolerancia');
             const calculateBtn = document.getElementById('calculateBtn');
             const resultsSection = document.getElementById('resultsSection');
+            
+            // --- Displays de Resultados ---
             const sumNosisDisplay = document.getElementById('sumNosis');
+            const nosisCorreoValueDisplay = document.getElementById('nosisCorreoValueDisplay');
             const diffValueDisplay = document.getElementById('diffValue');
             const percentageLargerDisplay = document.getElementById('percentageLarger');
             const percentageSmallerDisplay = document.getElementById('percentageSmaller');
             const errorMessageDisplay = document.getElementById('errorMessage');
-            const analyzeNosisBtn = document.getElementById('analyzeNosisBtn');
-            const nosisAnalysisResultDiv = document.getElementById('nosisAnalysisResult');
-            const analysisTextSpan = document.getElementById('analysisText');
-            const analysisLoadingDiv = document.getElementById('analysisLoading');
+
+            // --- Elementos del Diagnóstico ---
+            const diagnosticoBox = document.getElementById('diagnosticoBox');
+            const diagnosticoText = document.getElementById('diagnosticoText');
 
             calculateBtn.addEventListener('click', () => {
-                errorMessageDisplay.textContent = '';
+                // --- 1. Resetear estado ---
                 errorMessageDisplay.classList.add('hidden');
                 resultsSection.classList.add('hidden');
-                nosisAnalysisResultDiv.classList.add('hidden');
+                diagnosticoBox.classList.remove('diag-success', 'diag-warning', 'diag-error');
+                diagnosticoText.textContent = 'Calculando...';
 
+                // --- 2. Obtener y validar valores ---
                 const nosisValuesRaw = nosisDataInput.value.trim();
                 const nosisCorreoValue = parseFloat(nosisCorreoInput.value.trim());
+                let toleranciaValue = parseFloat(toleranciaInput.value.trim());
 
-                if (!nosisValuesRaw) {
-                    errorMessageDisplay.textContent = 'Por favor, introduce los números de la columna NOSIS.';
+                if (isNaN(toleranciaValue) || toleranciaValue < 0) {
+                    toleranciaValue = 0; // Si la tolerancia no es válida, se asume 0.
+                }
+
+                if (!nosisValuesRaw || isNaN(nosisCorreoValue)) {
+                    errorMessageDisplay.textContent = 'Por favor, completa los campos de NOSIS y NOSIS Correo.';
                     errorMessageDisplay.classList.remove('hidden');
                     return;
                 }
 
-                if (isNaN(nosisCorreoValue)) {
-                    errorMessageDisplay.textContent = 'Por favor, introduce un valor numérico para NOSIS Correo.';
-                    errorMessageDisplay.classList.remove('hidden');
-                    return;
-                }
-
-                const nosisNumbers = nosisValuesRaw.split('\n')
-                                                .map(line => parseFloat(line.trim()))
-                                                .filter(num => !isNaN(num));
+                const nosisNumbers = nosisValuesRaw.split('\n').map(line => parseFloat(line.trim())).filter(num => !isNaN(num));
 
                 if (nosisNumbers.length === 0) {
                     errorMessageDisplay.textContent = 'No se encontraron números válidos en los datos de NOSIS.';
@@ -235,98 +180,41 @@
                     return;
                 }
 
+                // --- 3. Realizar cálculos ---
                 const sumNosis = nosisNumbers.reduce((acc, curr) => acc + curr, 0);
-
-                if (sumNosis === 0 && nosisCorreoValue === 0) {
-                     errorMessageDisplay.textContent = 'Ambos valores son cero, no se puede calcular el porcentaje de diferencia.';
-                     errorMessageDisplay.classList.remove('hidden');
-                     sumNosisDisplay.textContent = '0';
-                     diffValueDisplay.textContent = '0';
-                     percentageLargerDisplay.textContent = '0.00%';
-                     percentageSmallerDisplay.textContent = '0.00%';
-                     return;
-                }
-                
+                const difference = Math.abs(sumNosis - nosisCorreoValue);
                 const largerValue = Math.max(sumNosis, nosisCorreoValue);
                 const smallerValue = Math.min(sumNosis, nosisCorreoValue);
-                const difference = Math.abs(largerValue - smallerValue);
 
-                let percentageLarger = 0;
-                if (smallerValue !== 0) {
-                    percentageLarger = (difference / smallerValue) * 100;
-                } else if (largerValue !== 0) {
-                    percentageLarger = Infinity;
+                // --- 4. Lógica del Diagnóstico ---
+                if (difference === 0) {
+                    diagnosticoBox.classList.add('diag-success');
+                    diagnosticoText.innerHTML = '<span class="text-3xl mr-2">✅</span>Coincidencia Exacta';
+                } else if (difference <= toleranciaValue) {
+                    diagnosticoBox.classList.add('diag-warning');
+                    diagnosticoText.innerHTML = '<span class="text-3xl mr-2">ℹ️</span>Dif. Aceptable';
+                } else {
+                    diagnosticoBox.classList.add('diag-error');
+                    diagnosticoText.innerHTML = '<span class="text-3xl mr-2">❌</span>Error de Conciliación';
                 }
-
-                let percentageSmaller = 0;
-                if (largerValue !== 0) {
-                    percentageSmaller = (difference / largerValue) * 100;
-                } else if (smallerValue !== 0) {
-                    percentageSmaller = Infinity;
-                }
-
-                sumNosisDisplay.textContent = sumNosis.toLocaleString('es-ES', { maximumFractionDigits: 2 });
-                diffValueDisplay.textContent = difference.toLocaleString('es-ES', { maximumFractionDigits: 2 });
                 
-                percentageLargerDisplay.textContent = isFinite(percentageLarger) ?
-                    percentageLarger.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%' : '∞%';
+                // --- 5. Calcular porcentajes (evitando división por cero) ---
+                let percentageLarger = (smallerValue !== 0) ? (difference / smallerValue) * 100 : (largerValue !== 0 ? Infinity : 0);
+                let percentageSmaller = (largerValue !== 0) ? (difference / largerValue) * 100 : 0;
 
-                percentageSmallerDisplay.textContent = isFinite(percentageSmaller) ?
-                    percentageSmaller.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%' : '∞%';
+                // --- 6. Mostrar resultados en la UI ---
+                const formatOptions = { maximumFractionDigits: 2 };
+                const percentFormatOptions = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
 
-
+                sumNosisDisplay.textContent = sumNosis.toLocaleString('es-ES', formatOptions);
+                nosisCorreoValueDisplay.textContent = nosisCorreoValue.toLocaleString('es-ES', formatOptions);
+                diffValueDisplay.textContent = difference.toLocaleString('es-ES', formatOptions);
+                
+                percentageLargerDisplay.textContent = isFinite(percentageLarger) ? percentageLarger.toLocaleString('es-ES', percentFormatOptions) + '%' : '∞%';
+                percentageSmallerDisplay.textContent = isFinite(percentageSmaller) ? percentageSmaller.toLocaleString('es-ES', percentFormatOptions) + '%' : '∞%';
+                
                 resultsSection.classList.remove('hidden');
             });
-
-            // --- Lógica del LLM para Análisis de Diferencia NOSIS ---
-            analyzeNosisBtn.addEventListener('click', async () => {
-                const sumNosis = parseFloat(sumNosisDisplay.textContent.replace(/\./g, '').replace(/,/g, '.'));
-                const nosisCorreoValue = parseFloat(nosisCorreoInput.value.trim());
-
-                if (resultsSection.classList.contains('hidden') || isNaN(sumNosis) || isNaN(nosisCorreoValue)) {
-                    errorMessageDisplay.textContent = 'Por favor, calcula los resultados de NOSIS primero.';
-                    errorMessageDisplay.classList.remove('hidden');
-                    return;
-                }
-
-                nosisAnalysisResultDiv.classList.add('hidden');
-                analysisTextSpan.textContent = '';
-                analysisLoadingDiv.classList.remove('hidden');
-
-                const prompt = `La suma total de NOSIS es ${sumNosis}. El valor de NOSIS recibido por correo es ${nosisCorreoValue}. ¿Qué implica esta diferencia en un contexto de negocio? Proporciona un breve análisis en español.`;
-
-                try {
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                    const payload = { contents: chatHistory };
-                    const apiKey = ""; 
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    const result = await response.json();
-
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
-                        analysisTextSpan.textContent = text;
-                    } else {
-                        analysisTextSpan.textContent = 'No se pudo generar el análisis. Inténtalo de nuevo.';
-                        console.error('Gemini API response structure unexpected:', result);
-                    }
-                } catch (error) {
-                    analysisTextSpan.textContent = 'Error al conectar con la IA. Por favor, revisa tu conexión.';
-                    console.error('Error calling Gemini API:', error);
-                } finally {
-                    analysisLoadingDiv.classList.add('hidden');
-                    nosisAnalysisResultDiv.classList.remove('hidden');
-                }
-            });
-            // La lógica para el botón "Volver al Menú Principal" ha sido eliminada.
         });
     </script>
 </body>
