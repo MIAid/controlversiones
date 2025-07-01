@@ -166,10 +166,13 @@
                 URL.revokeObjectURL(link.href);
             }
             saveTxtBtn.addEventListener('click', () => {
-                if (!lastResult.diagnosis) { alert("Realiza un cálculo primero."); return; }
-                const now = new Date(); const timestamp = now.toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' });
-                const formatOptions = { style: 'currency', currency: 'ARS' };
-                const reportContent = `
+        if (!lastResult.diagnosis) { alert("Realiza un cálculo primero."); return; }
+        const now = new Date(); 
+        const timestamp = now.toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' });
+
+        const numberFormat = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+
+        const reportContent = `
 -----------------------------------
   INFORME DE CONCILIACIÓN
 -----------------------------------
@@ -179,15 +182,16 @@ DIAGNÓSTICO:       ${lastResult.diagnosis}
 ===================================
 DETALLES NUMÉRICOS
 ===================================
-Suma Total NOSIS:    ${lastResult.sumNosis.toLocaleString('es-AR', formatOptions)}
-Valor NOSIS Correo:  ${lastResult.nosisCorreoValue.toLocaleString('es-AR', formatOptions)}
+Suma Total NOSIS:    ${lastResult.sumNosis.toLocaleString('es-AR', numberFormat)}
+Valor NOSIS Correo:  ${lastResult.nosisCorreoValue.toLocaleString('es-AR', numberFormat)}
 -----------------------------------
-Diferencia Numérica: ${lastResult.difference.toLocaleString('es-AR', formatOptions)}
-Impacto Porcentual:  ${lastResult.percentage.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%
+Diferencia Numérica: ${lastResult.difference.toLocaleString('es-AR', numberFormat)}
+Impacto Porcentual:  ${lastResult.percentage.toLocaleString('es-AR', numberFormat)}%
 --- FIN DEL INFORME ---`;
-                const filename = `informe_nosis_${now.toISOString().slice(0,10)}.txt`;
-                generateDownload(filename, reportContent.trim(), "text/plain;charset=utf-8,");
-            });
+
+        const filename = `informe_nosis_${now.toISOString().slice(0,10)}.txt`;
+        generateDownload(filename, reportContent.trim(), "text/plain;charset=utf-8,");
+    });
             saveCsvBtn.addEventListener('click', () => {
                 if (!lastResult.diagnosis) { alert("Realiza un cálculo primero."); return; }
                 const now = new Date(); const timestamp = now.toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' });
