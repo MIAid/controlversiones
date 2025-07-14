@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparador Dinámico de Totales v9</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f0f4f8; margin: 0; padding: 20px 0 50px 0; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 800px; width: 90%; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); padding: 30px; margin-top: 30px; }
+        h1 { font-size: 2.5rem; font-weight: 800; text-align: center; background: linear-gradient(45deg, #0056b3, #8a2be2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; }
+        .input-section { margin-bottom: 20px; }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 1.1rem; font-semibold; margin-bottom: 8px; }
+        .input-group input, .input-group textarea { width: 100%; box-sizing: border-box; padding: 12px; border-radius: 8px; border: 1px solid #ccc; transition: all 0.3s; }
+        .input-group input:focus, .input-group textarea:focus { border-color: #0056b3; box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2); outline: none; }
+        .input-group textarea { min-height: 120px; }
+        .result-box { padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .diag-perfect { background-color: #d1fae5; } .diag-perfect .diag-text { color: #047857; }
+        .diag-success { background-color: #dcfce7; } .diag-success .diag-text { color: #15803d; }
+        .diag-warning { background-color: #fef9c3; } .diag-warning .diag-text { color: #a16207; }
+        .diag-error { background-color: #fee2e2; } .diag-error .diag-text { color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-center bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6 tracking-tight">Comparador Dinámico</h1>
+
+        <div class="space-y-6">
+            <div class="input-section bg-blue-50 p-6 rounded-lg shadow-inner">
+                <div class="input-group">
+                    <label for="renapepData" class="text-xl font-semibold text-blue-800 mb-4">Paso 1: Introduce los datos de "RENAPEP"</label>
+                    <textarea id="renapepData" placeholder="Copia y pega aquí tu lista de números..." class="p-3 border border-blue-300 rounded-md"></textarea>
+                </div>
+            </div>
+            <div class="input-section bg-green-50 p-6 rounded-lg shadow-inner">
+                <div class="input-group">
+                    <label for="apiDatos" class="text-xl font-semibold text-green-800 mb-4">Paso 2: Introduce el valor de "API Datos" (Opcional)</label>
+                    <input type="number" id="apiDatos" placeholder="Valor a comparar..." step="any" class="p-3 border border-green-300 rounded-md">
+                </div>
+            </div>
+            <div class="input-section bg-yellow-50 p-6 rounded-lg shadow-inner">
+                 <div class="input-group">
+                    <label for="apiRostro" class="text-xl font-semibold text-yellow-800 mb-4">Paso 3: Introduce el valor de "API Rostro" (Opcional)</label>
+                    <input type="number" id="apiRostro" placeholder="Valor a comparar..." step="any" class="p-3 border border-yellow-300 rounded-md">
+                </div>
+            </div>
+            <div class="input-section bg-purple-50 p-6 rounded-lg shadow-inner">
+                <div class="input-group">
+                    <label for="apiTotal" class="text-xl font-semibold text-purple-800 mb-4">Paso 4: Introduce el valor de "Transacción Total" (Opcional)</label>
+                    <input type="number" id="apiTotal" placeholder="Valor a comparar..." step="any" class="p-3 border border-purple-300 rounded-md">
+                </div>
+            </div>
+        </div>
+
+        <button id="calculateBtn" class="w-full mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-indigo-700 transition">
+            Calcular y Diagnosticar
+        </button>
+
+        <div id="resultsSection" class="results-section bg-gray-100 p-6 mt-6 rounded-lg shadow-md space-y-4 hidden">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">Resultados de la Comparación</h2>
+            
+            <div id="diagnosticoBox" class="result-box md:col-span-1 bg-gray-200">
+                <p id="diagnosticoTitle" class="text-lg font-semibold text-gray-600">Diagnóstico:</p>
+                <p id="diagnosticoText" class="text-2xl font-extrabold mt-1 diag-text">Esperando cálculo...</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                <div id="renapepResultBox" class="result-box bg-blue-100 hidden"><p class="text-lg text-blue-700">Suma Total RENAPEP:</p><p id="sumRenapepDisplay" class="text-3xl font-extrabold text-blue-900 mt-1">0</p></div>
+                <div id="apiDatosResultBox" class="result-box bg-green-100 hidden"><p class="text-lg text-green-700">API Datos:</p><p id="apiDatosDisplay" class="text-3xl font-extrabold text-green-900 mt-1">0</p></div>
+                <div id="apiRostroResultBox" class="result-box bg-yellow-100 hidden"><p class="text-lg text-yellow-700">API Rostro:</p><p id="apiRostroDisplay" class="text-3xl font-extrabold text-yellow-900 mt-1">0</p></div>
+                <div id="apiTotalResultBox" class="result-box bg-purple-100 hidden"><p class="text-lg text-purple-700">API Total:</p><p id="apiTotalDisplay" class="text-3xl font-extrabold text-purple-900 mt-1">0</p></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                <div class="result-box bg-orange-100"><p class="text-lg text-orange-700">Diferencia Numérica:</p><p id="diffValue" class="text-3xl font-extrabold text-orange-900 mt-1">0</p></div>
+                <div class="result-box bg-red-100"><p class="text-lg text-red-700">% Dif. (sobre valor mayor):</p><p id="percentageSmaller" class="text-3xl font-extrabold text-red-900 mt-1">0.00%</p></div>
+            </div>
+
+            <div id="errorMessage" class="text-red-600 text-center font-medium pt-4 hidden"></div>
+
+            <div class="mt-6 flex flex-col md:flex-row gap-4">
+                <button id="saveTxtBtn" class="w-full bg-gray-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-800 transition">📄 Generar Reporte (.txt)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Elementos del DOM ---
+            const renapepDataInput = document.getElementById('renapepData');
+            const apiDatosInput = document.getElementById('apiDatos');
+            const apiRostroInput = document.getElementById('apiRostro');
+            const apiTotalInput = document.getElementById('apiTotal');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const saveTxtBtn = document.getElementById('saveTxtBtn');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            // Displays de resultados
+            const resultBoxes = {
+                renapep: document.getElementById('renapepResultBox'),
+                apiDatos: document.getElementById('apiDatosResultBox'),
+                apiRostro: document.getElementById('apiRostroResultBox'),
+                apiTotal: document.getElementById('apiTotalResultBox')
+            };
+            const displays = {
+                sumRenapep: document.getElementById('sumRenapepDisplay'),
+                apiDatos: document.getElementById('apiDatosDisplay'),
+                apiRostro: document.getElementById('apiRostroDisplay'),
+                apiTotal: document.getElementById('apiTotalDisplay')
+            };
+            
+            const diffValueDisplay = document.getElementById('diffValue');
+            const percentageSmallerDisplay = document.getElementById('percentageSmaller');
+            const errorMessageDisplay = document.getElementById('errorMessage');
+            const diagnosticoBox = document.getElementById('diagnosticoBox');
+            const diagnosticoTitle = document.getElementById('diagnosticoTitle');
+            const diagnosticoText = document.getElementById('diagnosticoText');
+            
+            let lastResult = {};
+
+            const formatOptions = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+
+            calculateBtn.addEventListener('click', () => {
+                // --- 1. Resetear y Ocultar UI ---
+                errorMessageDisplay.classList.add('hidden');
+                resultsSection.classList.add('hidden');
+                Object.values(resultBoxes).forEach(box => box.classList.add('hidden'));
+
+                // --- 2. Obtener y Parsear Valores ---
+                const renapepValuesRaw = renapepDataInput.value.trim();
+                const apiDatosValue = parseFloat(apiDatosInput.value.trim().replace(',', '.'));
+                const apiRostroValue = parseFloat(apiRostroInput.value.trim().replace(',', '.'));
+                const apiTotalValue = parseFloat(apiTotalInput.value.trim().replace(',', '.'));
+
+                const renapepNumbers = renapepValuesRaw.split('\n').map(line => parseFloat(line.trim().replace(',', '.'))).filter(num => !isNaN(num));
+                const sumRenapep = renapepNumbers.length > 0 ? renapepNumbers.reduce((acc, curr) => acc + curr, 0) : NaN;
+                
+                // --- 3. Determinar el Par de Comparación ---
+                let comparisonValue = NaN;
+                let comparisonName = '';
+                const baseName = 'RENAPEP';
+
+                if (!isNaN(apiDatosValue)) {
+                    comparisonValue = apiDatosValue;
+                    comparisonName = 'API Datos';
+                } else if (!isNaN(apiRostroValue)) {
+                    comparisonValue = apiRostroValue;
+                    comparisonName = 'API Rostro';
+                } else if (!isNaN(apiTotalValue)) {
+                    comparisonValue = apiTotalValue;
+                    comparisonName = 'Transacción Total';
+                }
+
+                // --- 4. Validación ---
+                if (isNaN(sumRenapep) || isNaN(comparisonValue)) {
+                    errorMessageDisplay.textContent = 'Para comparar, debes llenar los datos de RENAPEP y al menos uno de los otros campos.';
+                    errorMessageDisplay.classList.remove('hidden');
+                    resultsSection.classList.remove('hidden');
+                    diagnosticoBox.classList.add('diag-error');
+                    diagnosticoText.innerHTML = '❌ Faltan Datos';
+                    return;
+                }
+                
+                // --- 5. Realizar Cálculo Principal ---
+                const difference = Math.abs(sumRenapep - comparisonValue);
+                const largerValue = Math.max(sumRenapep, comparisonValue);
+                const percentDifference = (largerValue !== 0) ? (difference / largerValue) * 100 : 0;
+                
+                // --- 6. Lógica de Diagnóstico ---
+                let diagnosisMessage = '';
+                let diagnosisIcon = '';
+                diagnosticoBox.className = 'result-box md:col-span-1'; // Reset classes
+                if (difference === 0) {
+                    diagnosticoBox.classList.add('diag-perfect');
+                    diagnosisIcon = '✳️'; diagnosisMessage = 'Coincidencia Exacta';
+                } else if (percentDifference < 0.1) {
+                    diagnosticoBox.classList.add('diag-success');
+                    diagnosisIcon = '✅'; diagnosisMessage = 'Dif. Mínima (Aceptable)';
+                } else if (percentDifference >= 0.1 && percentDifference <= 1) {
+                    diagnosticoBox.classList.add('diag-warning');
+                    diagnosisIcon = '⚠️'; diagnosisMessage = 'Advertencia de Conciliación';
+                } else {
+                    diagnosticoBox.classList.add('diag-error');
+                    diagnosisIcon = '❌'; diagnosisMessage = 'Error de Conciliación';
+                }
+
+                // --- 7. Actualizar UI y Mostrar Resultados Visibles ---
+                diagnosticoTitle.textContent = `Diagnóstico (${baseName} vs ${comparisonName}):`;
+                diagnosticoText.innerHTML = `<span class="text-2xl mr-2">${diagnosisIcon}</span>${diagnosisMessage}`;
+
+                // Mostrar solo las tarjetas con datos
+                if (!isNaN(sumRenapep)) {
+                    displays.sumRenapep.textContent = sumRenapep.toLocaleString('es-AR', formatOptions);
+                    resultBoxes.renapep.classList.remove('hidden');
+                }
+                if (!isNaN(apiDatosValue)) {
+                    displays.apiDatos.textContent = apiDatosValue.toLocaleString('es-AR', formatOptions);
+                    resultBoxes.apiDatos.classList.remove('hidden');
+                }
+                if (!isNaN(apiRostroValue)) {
+                    displays.apiRostro.textContent = apiRostroValue.toLocaleString('es-AR', formatOptions);
+                    resultBoxes.apiRostro.classList.remove('hidden');
+                }
+                if (!isNaN(apiTotalValue)) {
+                    displays.apiTotal.textContent = apiTotalValue.toLocaleString('es-AR', formatOptions);
+                    resultBoxes.apiTotal.classList.remove('hidden');
+                }
+
+                diffValueDisplay.textContent = difference.toLocaleString('es-AR', formatOptions);
+                percentageSmallerDisplay.textContent = percentDifference.toLocaleString('es-AR', formatOptions) + '%';
+                
+                resultsSection.classList.remove('hidden');
+
+                // --- 8. Guardar resultado para exportar ---
+                lastResult = {
+                    sumRenapep: !isNaN(sumRenapep) ? sumRenapep : null,
+                    apiDatosValue: !isNaN(apiDatosValue) ? apiDatosValue : null,
+                    apiRostroValue: !isNaN(apiRostroValue) ? apiRostroValue : null,
+                    apiTotalValue: !isNaN(apiTotalValue) ? apiTotalValue : null,
+                    baseName,
+                    comparisonName,
+                    difference,
+                    diagnosis: `${diagnosisIcon} ${diagnosisMessage}`,
+                    percentage: percentDifference
+                };
+            });
+            
+            // --- Lógica de Guardado TXT ---
+            function generateDownload(filename, content, mimeType) {
+                const link = document.createElement("a");
+                const file = new Blob([content], {type: mimeType});
+                link.href = URL.createObjectURL(file);
+                link.download = filename;
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }
+
+            saveTxtBtn.addEventListener('click', () => {
+                if (!lastResult.diagnosis) { alert("Realiza un cálculo primero."); return; }
+                const now = new Date(); 
+                const timestamp = now.toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' });
+                const numberFormat = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+                
+                // Construcción dinámica del reporte
+                let reportContent = `
+-------------------------------------------
+  INFORME DE CONCILIACIÓN
+-------------------------------------------
+Fecha y Hora:           ${timestamp}
+-------------------------------------------
+DIAGNÓSTICO (${lastResult.baseName} vs ${lastResult.comparisonName}): ${lastResult.diagnosis}
+===========================================
+DETALLES NUMÉRICOS
+===========================================
+`;
+                // Añadir solo las líneas con datos
+                if (lastResult.sumRenapep != null) {
+                    reportContent += `(Nuestra Database) NOSIS:     ${lastResult.sumRenapep.toLocaleString('es-AR', numberFormat)}\n`;
+                }
+                if (lastResult.apiDatosValue != null) {
+                    reportContent += ` Valor API Datos:          ${lastResult.apiDatosValue.toLocaleString('es-AR', numberFormat)}\n`;
+                }
+                if (lastResult.apiRostroValue != null) {
+                    reportContent += `Valor API Rostro:         ${lastResult.apiRostroValue.toLocaleString('es-AR', numberFormat)}\n`;
+                }
+                if (lastResult.apiTotalValue != null) {
+                    reportContent += `Valor Transacción Total:  ${lastResult.apiTotalValue.toLocaleString('es-AR', numberFormat)}\n`;
+                }
+                reportContent += `-------------------------------------------\n`;
+                reportContent += `Diferencia Numérica:      ${lastResult.difference.toLocaleString('es-AR', numberFormat)}\n`;
+                reportContent += `Impacto Porcentual:       ${lastResult.percentage.toLocaleString('es-AR', numberFormat)}%\n`;
+                reportContent += `--- FIN DEL INFORME ---`;
+
+                const filename = `informe_conciliacion_${now.toISOString().slice(0,10)}.txt`;
+                generateDownload(filename, reportContent.trim(), "text/plain;charset=utf-8");
+            });
+        });
+    </script>
+</body>
+</html>
